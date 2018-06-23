@@ -1,51 +1,64 @@
 <?php
 
-class CategoriaAtendimentoForm extends TWindow
+class AcompanhanteForm extends TWindow
 {
     private $form;
 
     public function __construct()
     {
         parent::__construct();
+        parent::setTitle( "Cadastro de Acompanhante" );
 
-        // Título da página de formulário de cadastro
-        parent::setTitle( "Cadastro de Categoria de Atendimento" );
+        parent::setSize( 0.500, 0.650 );
 
-        // Definição do tamanho do formulário na tela.
-        parent::setSize( 0.500, 0.450 );
-
-        // Caractere para informação de campo obrigatório
         $redstar = '<font color="red"><b>*</b></font>';
 
-        // Definição dos campos para digitação - id THidden, não é apresentado
         $id        = new THidden( "id" ); 
+
+        $cpf       = new TEntry( "cpf" );
+        $cpf->placeholder = "CPF";
+        $cpf->setSize("25%");
+        $cpf->setMask("999.999.999-99");
+        $cpf->addValidation( TextFormat::set( "CPF" ), new TRequiredValidator );
+        $cpf->addValidation( TextFormat::set( "CPF" ), new TCPFValidator );
+
         $nome      = new TEntry( "nome" );
         $nome->forceUpperCase();
-        $nome->placeholder = "Nome da categoria";
+        $nome->placeholder = "Nome do acompanhante";
         $nome->setSize("100%");
         $nome->addValidation( TextFormat::set( "Nome" ), new TRequiredValidator );
 
-        // Definição do formulário, com linha de "campos obrigatórios" como título
-        $this->form = new BootstrapFormBuilder( "form_categoriaatendimento" );
+        $endereco  = new TEntry( "endereco" );
+        $endereco->forceUpperCase();
+        $endereco->placeholder = "Endereço completo do acompanhante";
+        $endereco->setSize("100%");
+        $endereco->addValidation( TextFormat::set( "Endereço" ), new TRequiredValidator );
+
+        $contato      = new TEntry( "contato" );
+        $contato->placeholder = "DDD + Número";
+        $contato->setSize("25%");
+        $contato->setMask("(99)999999999");
+        $contato->addValidation( TextFormat::set( "Contato" ), new TRequiredValidator );
+        $contato->addValidation( TextFormat::set( "Contato" ), new TMinLengthValidator, array(12));
+
+        $this->form = new BootstrapFormBuilder( "form_acompanhante" );
         $this->form->setFormTitle( "($redstar) campos obrigatórios" );
         $this->form->class = "tform";
 
-        // Inclusão dos campos definidos anteriormente ao formulário
         $this->form->addFields( [ $id ] );
+        $this->form->addFields([new TLabel("CPF: $redstar")], [$cpf]);
         $this->form->addFields([new TLabel("Nome: $redstar")], [$nome]);
+        $this->form->addFields([new TLabel("Endereço: $redstar")], [$endereco]);
+        $this->form->addFields([new TLabel("Contato: $redstar")], [$contato]);
         
-        // Botões de ação
         $this->form->addAction( "Salvar", new TAction( [ $this, "onSave" ] ), "fa:floppy-o" );
 
-        // Gera o conteúdo a ser apresentado na tela
-        // Conteúdo: blocos com o formulário de cadastro/alteração
         $container = new TVBox();
         $container->style = "width: 100%";
         $container->add( $this->form );
         parent::add( $container );
     }
 
-    // Função para inserir os dados do formulário no banco
     public function onSave()
     {
         try {
@@ -54,12 +67,12 @@ class CategoriaAtendimentoForm extends TWindow
 
             TTransaction::open( "database" );
 
-            $object = $this->form->getData("CategoriaAtendimentoRecord");
+            $object = $this->form->getData("AcompanhanteRecord");
             $object->store();
 
             TTransaction::close();
 
-            $action = new TAction( [ "CategoriaAtendimentoList", "onReload" ] );
+            $action = new TAction( [ "AcompanhanteList", "onReload" ] );
 
             new TMessage( "info", "Registro salvo com sucesso!", $action );
 
@@ -68,21 +81,18 @@ class CategoriaAtendimentoForm extends TWindow
             TTransaction::rollback();
 
             new TMessage( "error", "Ocorreu um erro ao tentar salvar o registro!<br><br><br><br>" . $ex->getMessage() );
-
         }
     }
 
-    // Função para alterar os dados no banco
     public function onEdit( $param )
     {
         try {
             if( isset( $param[ "key" ] ) ) {
-                // Se for edição, altera o título do formulário para edição
-                parent::setTitle( "Edição de Categoria de Atendimento" );
+                parent::setTitle( "Edição de Acompanhante" );
 
                 TTransaction::open( "database" );
 
-                $object = new CategoriaAtendimentoRecord($param["key"]);
+                $object = new AcompanhanteRecord($param["key"]);
 
                 $this->form->setData($object);
 
