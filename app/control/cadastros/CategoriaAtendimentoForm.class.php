@@ -7,34 +7,44 @@ class CategoriaAtendimentoForm extends TWindow
     public function __construct()
     {
         parent::__construct();
-        parent::setTitle( "Cadastro de Categorias de Atendimento" );
-        parent::setSize( 0.600, 0.800 );
 
+        // Título da página de formulário de cadastro
+        parent::setTitle( "Cadastro de Categoria de Atendimento" );
+
+        // Definição do tamanho do formulário na tela.
+        parent::setSize( 0.500, 0.450 );
+
+        // Caractere para informação de campo obrigatório
         $redstar = '<font color="red"><b>*</b></font>';
 
+        // Definição dos campos para digitação - id THidden, não é apresentado
+        $id        = new THidden( "id" ); 
+        $nome      = new TEntry( "nome" );
+        $nome->setProperty("title", "O campo e obrigatorio");
+        $nome->setSize("100%");
+        $nome->addValidation( TextFormat::set( "Nome" ), new TRequiredValidator );
+
+        // Definição do formulário, com linha de "campos obrigatórios" como título
         $this->form = new BootstrapFormBuilder( "form_categoriaatendimento" );
         $this->form->setFormTitle( "($redstar) campos obrigatórios" );
         $this->form->class = "tform";
 
-        $id        = new THidden( "id" );
-        $nome      = new TEntry( "nome" );
-
-        $nome->setProperty("title", "O campo e obrigatorio");
-        $nome->setSize("70%");
-        $nome->addValidation( TextFormat::set( "Nome" ), new TRequiredValidator );
-
-        $this->form->addFields([new TLabel("Nome: $redstar")], [$nome]);
+        // Inclusão dos campos definidos anteriormente ao formulário
         $this->form->addFields( [ $id ] );
-
+        $this->form->addFields([new TLabel("Nome: $redstar")], [$nome]);
+        
+        // Botões de ação
         $this->form->addAction( "Salvar", new TAction( [ $this, "onSave" ] ), "fa:floppy-o" );
 
+        // Gera o conteúdo a ser apresentado na tela
+        // Conteúdo: blocos com o formulário de cadastro/alteração
         $container = new TVBox();
         $container->style = "width: 100%";
         $container->add( $this->form );
-
         parent::add( $container );
     }
 
+    // Função para inserir os dados do formulário no banco
     public function onSave()
     {
         try {
@@ -61,11 +71,13 @@ class CategoriaAtendimentoForm extends TWindow
         }
     }
 
+    // Função para alterar os dados no banco
     public function onEdit( $param )
     {
         try {
-
             if( isset( $param[ "key" ] ) ) {
+                // Se for edição, altera o título do formulário para edição
+                parent::setTitle( "Edição de Categoria de Atendimento" );
 
                 TTransaction::open( "database" );
 

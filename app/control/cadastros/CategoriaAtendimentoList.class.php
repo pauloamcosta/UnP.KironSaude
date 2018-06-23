@@ -2,82 +2,93 @@
 
 class CategoriaAtendimentoList extends TPage
 {
+    // Definição do formulário
     private $form;
+    // Definição do formulário
     private $datagrid;
+    // Definição da paginação
     private $pageNavigation;
+    // Variável de controle de carregamento da página
     private $loaded;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->form = new BootstrapFormBuilder( "form_list_convenio" );
-        $this->form->setFormTitle( "Listagem de Categorias de Atendimento" );
+        $this->form = new BootstrapFormBuilder( "form_list_categoriaatendimento" );
+
+        // Define o título.
+        $this->form->setFormTitle("<b>Categorias de Atendimento</b>" );
         $this->form->class = "tform";
 
         $opcao = new TCombo( "opcao" );
-        $dados = new TEntry( "dados" );
-
+        $opcao->setSize( "100%" );
         $opcao->setDefaultOption( "..::SELECIONE::.." );
-        $dados->setProperty( "title", "Informe os dados de acordo com a opção" );
-
-        $opcao->setSize( "38%" );
-        $dados->setSize( "38%" );
-
+        // Define a lista de opções de busca. 'nome' é o campo no banco, 'Nome' é o da exibição;
         $opcao->addItems( [ "nome" => "Nome" ] );
 
+        $dados = new TEntry( "dados" );
+        $dados->setSize( "100%" );
+        $dados->setProperty( "title", "Informe os dados de acordo com a opção" );
+
+        // Gera a estrutura do formulário de busca
         $this->form->addFields( [ new TLabel( "Opção de busca:" ) ], [ $opcao ] );
         $this->form->addFields( [ new TLabel( "Dados à buscar:" )  ], [ $dados ] );
 
+        // Adiciona os botões de busca e cadastro
         $this->form->addAction( "Buscar categoria", new TAction( [ $this, "onSearch" ] ), "fa:search" );
         $this->form->addAction( "Nova categoria", new TAction( [ "CategoriaAtendimentoForm", "onEdit" ] ), "bs:plus-sign green" );
 
-        $this->datagrid = new TDatagridTables();
-
-        // $this->datagrid->datatable = "true";
-        // $this->datagrid->style = "width: 100%";
-        // $this->datagrid->setHeight( 320 );
-
+        // Adiciona as colunas na grade de consulta
         $column_nomecategoria = new TDataGridColumn( "nome", "Nome", "left" );
 
-        $this->datagrid->addColumn( $column_nomecategoria );
-
+        // Define o botão de edição de registro
         $action_edit = new TDatagridTablesAction( [ "CategoriaAtendimentoForm", "onEdit" ] );
         $action_edit->setButtonClass( "btn btn-default" );
         $action_edit->setLabel( "Editar Registro" );
         $action_edit->setImage( "fa:pencil-square-o blue fa-lg" );
         $action_edit->setField( "id" );
-        $this->datagrid->addAction( $action_edit );
 
+        // Define o botão de exclusão de registro
         $action_del = new TDatagridTablesAction( [ $this, "onDelete" ] );
         $action_del->setButtonClass( "btn btn-default" );
         $action_del->setLabel( "Deletar Registro" );
         $action_del->setImage( "fa:trash-o red fa-lg" );
         $action_del->setField( "id" );
-        $this->datagrid->addAction( $action_del );
 
+        // Gera a estrutura do grid de consulta
+        $this->datagrid = new TDatagridTables();
+        $this->datagrid->addColumn( $column_nomecategoria );
+        $this->datagrid->addAction( $action_edit );
+        $this->datagrid->addAction( $action_del );
         $this->datagrid->createModel();
 
+        // Define a paginação
         $this->pageNavigation = new TPageNavigation();
         $this->pageNavigation->setAction( new TAction( [ $this, "onReload" ] ) );
         $this->pageNavigation->setWidth( $this->datagrid->getWidth() );
 
+        // Gera o conteúdo a ser apresentado
+        // Conteúdo: blocos com o formulário de busca e a grade de consulta
         $container = new TVBox();
         $container->style = "width: 100%";
         $container->add( $this->form );
         $container->add( TPanelGroup::pack( NULL, $this->datagrid ) );
-
         parent::add( $container );
     }
 
+    // Função para carregamento da página
     public function onReload( $param = NULL )
     {
         try {
 
+            // Conexão com o banco
             TTransaction::open( "database" );
 
+            // Nome do repositório (Record). No arquivo Record é informada a tabela do banco de dados.
             $repository = new TRepository( "CategoriaAtendimentoRecord" );
 
+            // Define estrutura de busca e carregamento dos dados
             if ( empty( $param[ "order" ] ) ) {
                 $param[ "order" ] = "id";
                 $param[ "direction" ] = "asc";
@@ -120,6 +131,7 @@ class CategoriaAtendimentoList extends TPage
         }
     }
 
+    // Função para realização de consulta
     public function onSearch()
     {
         $data = $this->form->getData();
@@ -128,10 +140,13 @@ class CategoriaAtendimentoList extends TPage
 
             if( !empty( $data->opcao ) && !empty( $data->dados ) ) {
 
+                // Conexão com o banco
                 TTransaction::open( "database" );
 
+                // Nome do repositório (Record). No arquivo Record é informada a tabela do banco de dados.
                 $repository = new TRepository( "CategoriaAtendimentoRecord" );
 
+                // Define estrutura de busca e carregamento dos dados
                 if ( empty( $param[ "order" ] ) ) {
                     $param[ "order" ] = "id";
                     $param[ "direction" ] = "asc";
@@ -201,6 +216,7 @@ class CategoriaAtendimentoList extends TPage
         }
     }
 
+    // Função para confirmação de exclusão do registro
     public function onDelete( $param = NULL )
     {
         if( isset( $param[ "key" ] ) ) {
@@ -215,6 +231,7 @@ class CategoriaAtendimentoList extends TPage
         }
     }
 
+    // Função para exclusão do registro
     function Delete( $param = NULL )
     {
         try {
