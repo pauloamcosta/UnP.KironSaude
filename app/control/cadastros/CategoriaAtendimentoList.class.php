@@ -160,7 +160,7 @@ class CategoriaAtendimentoList extends TPage
 
                 switch ( $data->opcao ) {
 
-                    case "nomecategoria":
+                    case "nome":
                         $criteria->add( new TFilter( $data->opcao, "LIKE", "%" . $data->dados . "%" ) );
                         break;
 
