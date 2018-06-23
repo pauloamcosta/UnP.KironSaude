@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title>{APP_NAME}</title>
+
+        {LIBRARIES}
+        {HEAD}
+
+        <style>
+            .navbar { position: relative; }
+            .systemicons { padding: 5px 0px 15px 25px !important; }
+            #tbutton_btn_entrar { background-color: #13583b !important; }
+            body { overflow: hidden; }
+            .navbar-brand { margin-left: 0 !important; }
+        </style>
+    </head>
+    <body>
+        <nav class="uppernavbar main-header navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0; text-align:center">
+            <div class="navbar-header systemicons">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" style="color:white" href="#">
+                    <img src="./app/images/system/hmn.png">
+                </a>
+                <a class="navbar-brand" style="color:white" href="#">
+                    <img src="./app/images/system/logo_small.png">
+                </a>
+            </div>
+            <!-- /.navbar-header -->
+        </nav>
+
+        <div id="wrapper">
+            <!-- Navigation -->
+
+            <div id="adianti_div_content" class="animated fadeInUp"></div>
+            <div id="welcometoast" class="animated fadeInUp" style="margin-top:0px">
+                <div class="panel panel-default" style="margin:auto; margin-top:90px; max-width:460px;">
+                    <div class="panel-heading">
+                        <div class="panel-title" style="text-align:center; color:#13583b; font-weight:bold;">
+                            bem vindo ao kiron saúde!
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="adianti_online_content"></div>
+            <div id="adianti_online_content2"></div>
+
+        </div>
+        <!-- /#wrapper -->
+        <script src="app/templates/{template}/js/admin-login.js"></script>
+        <script src="app/templates/{template}/plugins/node-waves/waves.js"></script>
+        <script src="app/templates/{template}/js/admin.js"></script>
+        <script src="app/templates/{template}/js/custom.js"></script>
+        <script src="app/templates/{template}/js/sweetalert.min.js"></script>
+        <script>
+            $(function() {
+                setTimeout(function() {
+                    $('#welcometoast').attr('class', 'animated fadeOutDown' );
+                }, 2500);
+            });
+        </script>
+    </body>
+</html>
