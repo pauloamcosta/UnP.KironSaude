@@ -40,7 +40,7 @@ class CategoriaAtendimentoList extends TPage
         $this->form->addAction( "Nova categoria", new TAction( [ "CategoriaAtendimentoForm", "onEdit" ] ), "bs:plus-sign green" );
 
         // Adiciona as colunas na grade de consulta
-        $column_nomecategoria = new TDataGridColumn( "nome", "Nome", "left" );
+        $column_nome = new TDataGridColumn( "nome", "Nome", "left" );
 
         // Define o botão de edição de registro
         $action_edit = new TDatagridTablesAction( [ "CategoriaAtendimentoForm", "onEdit" ] );
@@ -58,7 +58,7 @@ class CategoriaAtendimentoList extends TPage
 
         // Gera a estrutura do grid de consulta
         $this->datagrid = new TDatagridTables();
-        $this->datagrid->addColumn( $column_nomecategoria );
+        $this->datagrid->addColumn( $column_nome );
         $this->datagrid->addAction( $action_edit );
         $this->datagrid->addAction( $action_del );
         $this->datagrid->createModel();
