@@ -20,9 +20,9 @@ class CategoriaAtendimentoForm extends TWindow
         // Definição dos campos para digitação - id THidden, não é apresentado
         $id        = new THidden( "id" ); 
         $nome      = new TEntry( "nome" );
-        $nome->setProperty("title", "O campo e obrigatorio");
         $nome->setSize("100%");
         $nome->addValidation( TextFormat::set( "Nome" ), new TRequiredValidator );
+        $nome->placeholder = "Nome da categoria";
 
         // Definição do formulário, com linha de "campos obrigatórios" como título
         $this->form = new BootstrapFormBuilder( "form_categoriaatendimento" );

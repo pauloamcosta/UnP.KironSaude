@@ -29,7 +29,7 @@ class CategoriaAtendimentoList extends TPage
 
         $dados = new TEntry( "dados" );
         $dados->setSize( "100%" );
-        $dados->setProperty( "title", "Informe os dados de acordo com a opção" );
+        $dados->placeholder = "Informe os dados de acordo com a opção de busca informada";
 
         // Gera a estrutura do formulário de busca
         $this->form->addFields( [ new TLabel( "Opção de busca:" ) ], [ $opcao ] );
