@@ -29,28 +29,29 @@ class CategoriaAtendimentoList extends TPage
         $this->form->addFields( [ new TLabel( "Opção de busca:" ) ], [ $opcao ] );
         $this->form->addFields( [ new TLabel( "Dados à buscar:" )  ], [ $dados ] );
 
-        $this->form->addAction( "Buscar", new TAction( [ $this, "onSearch" ] ), "fa:search" );
-        $this->form->addAction( "Novo", new TAction( [ "CategoriaAtendimentoForm", "onEdit" ] ), "bs:plus-sign green" );
+        $this->form->addAction( "Buscar categoria", new TAction( [ $this, "onSearch" ] ), "fa:search" );
+        $this->form->addAction( "Nova categoria", new TAction( [ "CategoriaAtendimentoForm", "onEdit" ] ), "bs:plus-sign green" );
 
-        $this->datagrid = new BootstrapDatagridWrapper( new TDataGrid() );
-        $this->datagrid->datatable = "true";
-        $this->datagrid->style = "width: 100%";
-        $this->datagrid->setHeight( 320 );
+        $this->datagrid = new TDatagridTables();
+
+        // $this->datagrid->datatable = "true";
+        // $this->datagrid->style = "width: 100%";
+        // $this->datagrid->setHeight( 320 );
 
         $column_nomecategoria = new TDataGridColumn( "nome", "Nome", "left" );
 
         $this->datagrid->addColumn( $column_nomecategoria );
 
-        $action_edit = new TDataGridAction( [ "CategoriaAtendimentoForm", "onEdit" ] );
+        $action_edit = new TDatagridTablesAction( [ "CategoriaAtendimentoForm", "onEdit" ] );
         $action_edit->setButtonClass( "btn btn-default" );
-        $action_edit->setLabel( "Editar" );
+        $action_edit->setLabel( "Editar Registro" );
         $action_edit->setImage( "fa:pencil-square-o blue fa-lg" );
         $action_edit->setField( "id" );
         $this->datagrid->addAction( $action_edit );
 
-        $action_del = new TDataGridAction( [ $this, "onDelete" ] );
+        $action_del = new TDatagridTablesAction( [ $this, "onDelete" ] );
         $action_del->setButtonClass( "btn btn-default" );
-        $action_del->setLabel( "Deletar" );
+        $action_del->setLabel( "Deletar Registro" );
         $action_del->setImage( "fa:trash-o red fa-lg" );
         $action_del->setField( "id" );
         $this->datagrid->addAction( $action_del );
@@ -62,10 +63,9 @@ class CategoriaAtendimentoList extends TPage
         $this->pageNavigation->setWidth( $this->datagrid->getWidth() );
 
         $container = new TVBox();
-        $container->style = "width: 90%";
+        $container->style = "width: 100%";
         $container->add( $this->form );
         $container->add( TPanelGroup::pack( NULL, $this->datagrid ) );
-        $container->add( $this->pageNavigation );
 
         parent::add( $container );
     }
